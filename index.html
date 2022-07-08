@@ -22,11 +22,15 @@
         },
       };
 
-      var cursors;
+      var jumpVelocity = 10000;
+      var jump = false;
+      var cursorsARROWS;
+      var cursorsWASD;
       var player;
       var velocity = { x: 0, y: 0 };
-      var speed = 40;
+      var speed = 80;
       var decay = 1.03;
+      var downDecay = 20;
 
       var game = new Phaser.Game(config);
 
@@ -38,8 +42,14 @@
       }
 
       function create() {
-        // cursors = this.input.keyboard.createCursorKeys();
-        cursors = this.input.keyboard.createCursorKeys(); 
+        // cursorsWASD = this.input.keyboard.createCursorKeys();
+        cursorsARROWS = this.input.keyboard.createCursorKeys();
+        cursorsWASD = this.input.keyboard.addKeys({
+          up: Phaser.Input.Keyboard.KeyCodes.W,
+          down: Phaser.Input.Keyboard.KeyCodes.S,
+          left: Phaser.Input.Keyboard.KeyCodes.A,
+          right: Phaser.Input.Keyboard.KeyCodes.D,
+        });
 
         player = this.physics.add.image(400, 300, "block");
 
@@ -47,7 +57,7 @@
 
         var particles = this.add.particles("red");
         var emitter = particles.createEmitter({
-          speed: 100,
+          speed: 50,
           scale: { start: 1, end: 0 },
           blendMode: "ADD",
         });
@@ -58,20 +68,28 @@
         player.setVelocityX(velocity.x);
         player.setVelocityY(velocity.y);
         velocity.x = velocity.x / decay;
-        velocity.y = velocity.y / decay;
+        velocity.y = velocity.y / decay + downDecay;
 
-        if (cursors.left.isDown) {
+        if (cursorsWASD.left.isDown) {
           velocity.x -= speed;
         }
-        if (cursors.right.isDown) {
+        if (cursorsWASD.right.isDown) {
           velocity.x += speed;
         }
-        if (cursors.up.isDown) {
+        if (cursorsWASD.up.isDown) {
           velocity.y -= speed;
         }
-        if (cursors.down.isDown) {
+        if (cursorsWASD.down.isDown) {
           velocity.y += speed;
         }
+        if (cursorsARROWS.up.isDown) {
+          jump 
+        }
+        // if (jump) {
+        //   console.log("JUMP");
+        //   velocity.y -= jumpVelocity;
+        //   jump = false;
+        // }
       }
     </script>
   </body>
