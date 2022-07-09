@@ -1,96 +1,140 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
-  </head>
-  <body>
-    <script>
-      var config = {
-        type: Phaser.AUTO,
-        parent: "phaser-example",
-        backgroundColor: "#0072bc",
-        physics: {
-          default: "arcade",
-          arcade: {
-            // debug: true,
-          },
-        },
-        scene: {
-          preload: preload,
-          create: create,
-          update: update,
-        },
-      };
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+    </head>
+    <body>
+        <script>
+            var config = {
+                type: Phaser.AUTO,
+                parent: "phaser-example",
+                backgroundColor: "#0072bc",
+                physics: {
+                    default: "arcade",
+                    arcade: {
+                        // debug: true,
+                    },
+                },
+                scene: {
+                    preload: preload,
+                    create: create,
+                    update: update,
+                },
+            };
+            const TURBO_MULTIPLIER = 2;
+            var gravity = 50;
 
-      var jumpVelocity = 10000;
-      var jump = false;
-      var cursorsARROWS;
-      var cursorsWASD;
-      var player;
-      var velocity = { x: 0, y: 0 };
-      var speed = 80;
-      var decay = 1.03;
-      var downDecay = 20;
+            var cursorsARROWS;
+            var cursorsWASD;
+            var player;
+            var velocity = { x: 0, y: 0 };
+            var horizontalSpeed = 50;
+            var verticalSpeed = 15;
+            var fullSpeed = 500;
+            var sideDecay = 1.1;
+            var downDecay = 1.03;
 
-      var game = new Phaser.Game(config);
+            var jumpPower = 1600;
+            var flipFlop = { r: false, l: false, u: false, d: false };
+            var turboFlipFlop = false;
+            var turboMultiplier = 0;
+            var game = new Phaser.Game(config);
 
-      function preload() {
-        this.load.image("block", "green_check.png");
-        this.load.image("sky", "background_library.png");
-        this.load.image("logo", "green_check.png");
-        this.load.image("red", "green_check.png");
-      }
+            function preload() {
+                this.load.image("block", "green_check.png");
+                this.load.image("sky", "background_library.png");
+                this.load.image("logo", "green_check.png");
+                this.load.image("red", "green_check.png");
+            }
 
-      function create() {
-        // cursorsWASD = this.input.keyboard.createCursorKeys();
-        cursorsARROWS = this.input.keyboard.createCursorKeys();
-        cursorsWASD = this.input.keyboard.addKeys({
-          up: Phaser.Input.Keyboard.KeyCodes.W,
-          down: Phaser.Input.Keyboard.KeyCodes.S,
-          left: Phaser.Input.Keyboard.KeyCodes.A,
-          right: Phaser.Input.Keyboard.KeyCodes.D,
-        });
+            function create() {
+                // cursorsWASD = this.input.keyboard.createCursorKeys();
+                cursorsARROWS = this.input.keyboard.createCursorKeys();
+                cursorsWASD = this.input.keyboard.addKeys({
+                    up: Phaser.Input.Keyboard.KeyCodes.W,
+                    down: Phaser.Input.Keyboard.KeyCodes.S,
+                    left: Phaser.Input.Keyboard.KeyCodes.A,
+                    right: Phaser.Input.Keyboard.KeyCodes.D,
+                });
 
-        player = this.physics.add.image(400, 300, "block");
+                player = this.physics.add.image(400, 300, "block");
 
-        player.setCollideWorldBounds(true);
+                player.setCollideWorldBounds(true);
 
-        var particles = this.add.particles("red");
-        var emitter = particles.createEmitter({
-          speed: 50,
-          scale: { start: 1, end: 0 },
-          blendMode: "ADD",
-        });
-        emitter.startFollow(player);
-      }
+                var particles = this.add.particles("red");
+                var emitter = particles.createEmitter({
+                    speed: 50,
+                    scale: { start: 1, end: 0 },
+                    blendMode: "ADD",
+                });
+                emitter.startFollow(player);
+            }
 
-      function update() {
-        player.setVelocityX(velocity.x);
-        player.setVelocityY(velocity.y);
-        velocity.x = velocity.x / decay;
-        velocity.y = velocity.y / decay + downDecay;
+            function update() {
+                player.setVelocityX(velocity.x);
+                player.setVelocityY(velocity.y);
+                velocity.x = velocity.x / sideDecay;
+                velocity.y = velocity.y / downDecay + gravity;
 
-        if (cursorsWASD.left.isDown) {
-          velocity.x -= speed;
-        }
-        if (cursorsWASD.right.isDown) {
-          velocity.x += speed;
-        }
-        if (cursorsWASD.up.isDown) {
-          velocity.y -= speed;
-        }
-        if (cursorsWASD.down.isDown) {
-          velocity.y += speed;
-        }
-        if (cursorsARROWS.up.isDown) {
-          jump 
-        }
-        // if (jump) {
-        //   console.log("JUMP");
-        //   velocity.y -= jumpVelocity;
-        //   jump = false;
-        // }
-      }
-    </script>
-  </body>
+                updateSpeedWASD();
+                updateLeftRightFlipFlop();
+                udpateJumpFlipFlop();
+                updateTurboFlipFlop();
+
+                turboMultiplier = turboFlipFlop ? TURBO_MULTIPLIER : 1;
+            }
+
+            const updateTurboFlipFlop = () => {
+                if (cursorsARROWS.left.isDown) {
+                    turboFlipFlop = true;
+                } else {
+                    turboFlipFlop = false;
+                }
+            };
+            const udpateJumpFlipFlop = () => {
+                if (cursorsARROWS.up.isDown) {
+                    if (flipFlop.u) {
+                        velocity.y = -jumpPower;
+                        flipFlop.u = false;
+                    }
+                }
+                if (cursorsARROWS.up.isUp) {
+                    flipFlop.u = true;
+                }
+            };
+
+            const updateLeftRightFlipFlop = () => {
+                if (cursorsWASD.left.isDown) {
+                    if (flipFlop.l) {
+                        velocity.x = -fullSpeed;
+                        flipFlop.l = false;
+                    }
+                } else {
+                    flipFlop.l = true;
+                }
+                if (cursorsWASD.right.isDown) {
+                    if (flipFlop.r) {
+                        velocity.x = fullSpeed;
+                        flipFlop.r = false;
+                    }
+                } else {
+                    flipFlop.r = true;
+                }
+            };
+            const updateSpeedWASD = () => {
+                if (cursorsWASD.left.isDown) {
+                    velocity.x -= horizontalSpeed * turboMultiplier;
+                }
+                if (cursorsWASD.right.isDown) {
+                    velocity.x += horizontalSpeed * turboMultiplier;
+                }
+                if (cursorsWASD.up.isDown) {
+                    velocity.y -= verticalSpeed * turboMultiplier;
+                }
+                if (cursorsWASD.down.isDown) {
+                    velocity.y += verticalSpeed * turboMultiplier;
+                }
+            };
+        </script>
+    </body>
 </html>
