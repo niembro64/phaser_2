@@ -1,8 +1,8 @@
 * {
     padding: 0px;
     margin: 0px;
-    /* background-color: black;
-    color: white; */
+    background-color: black;
+    color: white;
     /* font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif; */
     font-family: "Press Start 2P", cursive;
 
@@ -20,6 +20,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: black;
+    color: white;
 }
 
 button {
@@ -27,19 +29,31 @@ button {
     width: 60px;
     height: 60px;
     font-size: x-large;
+    background-color: black;
+    color: white;
+}
+button > h1 {
+    background-color: transparent;
+    color: black;
 }
 #gameInfo {
     display: flex;
     flex-direction: row;
+    background-color: black;
+    color: white;
 }
 
 ul {
     list-style-type: none;
-    border: 5px dashed black;
+    border: 5px dashed white;
     padding: 20px;
+    background-color: black;
+    color: white;
 }
 
 .name-tag {
     color: black;
     padding: 10px;
+    background-color: black;
+    color: white;
 }
