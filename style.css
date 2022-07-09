@@ -11,13 +11,18 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
 }
 
 #yourgamediv {
-    border: 6px dashed grey;
-    padding: 10px 12px 5px 12px;
 }
 
 button {
     margin: 10px;
+}
+#gameInfo{
+
+    display: flex;
+    flex-direction: row;
+
 }

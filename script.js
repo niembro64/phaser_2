@@ -20,13 +20,14 @@ var config = {
     },
 };
 const TURBO_MULTIPLIER = 3;
-const HORIZONTAL_SPEED = 20;
+const HORIZONTAL_SPEED = 40;
 const VERTICAL_SPEED = 12;
 const GRAVITY = 50;
 var FULL_SPEED = 200;
-var SIDE_DECAY = 1.1;
+var SIDE_DECAY = 1.2;
 var DOWN_DECAY = 1.06;
 var JUMP_POWER = 1600;
+const LENGTH_OF_TAIL = 1000; 
 
 var cursorsARROWS;
 var cursorsWASD;
@@ -63,7 +64,7 @@ function create() {
         // speed: 100,
         speedY: 1,
         scale: { start: 0.5, end: 0 },
-        lifespan: 100,
+        lifespan: LENGTH_OF_TAIL,
         blendMode: "ADD",
     });
     player = this.physics.add.image(10, 10, "block");
