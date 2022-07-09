@@ -1,0 +1,23 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    /* background-color: black;
+    color: white; */
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#yourgamediv {
+    border: 6px dashed grey;
+    padding: 10px 12px 5px 12px;
+}
+
+button {
+    margin: 10px;
+}
