@@ -1,4 +1,3 @@
-
 var config = {
     scale: {
         width: 800,
@@ -28,7 +27,8 @@ var FULL_SPEED = 200;
 var SIDE_DECAY = 1.2;
 var DOWN_DECAY = 1.06;
 var JUMP_POWER = 1600;
-const LENGTH_OF_TAIL = 1000; 
+const LENGTH_OF_TAIL = 1000;
+const SPEED_OF_TAIL = 30;
 
 var cursorsARROWS;
 var cursorsWASD;
@@ -43,7 +43,7 @@ function preload() {
     this.load.image("block", "kirbsmallboi.png");
     this.load.image("sky", "kirbsmallboi.png");
     this.load.image("logo", "kirbsmallboi.png");
-    this.load.image("red", "green_check.png");
+    this.load.image("red", "red_dot.png");
 }
 
 function create() {
@@ -62,9 +62,8 @@ function create() {
 
     var particles = this.add.particles("red");
     var emitter = particles.createEmitter({
-        // speed: 100,
-        speedY: 1,
-        scale: { start: 0.5, end: 0 },
+        speed: SPEED_OF_TAIL,
+        scale: { start: 0.05, end: 0 },
         lifespan: LENGTH_OF_TAIL,
         blendMode: "ADD",
     });
