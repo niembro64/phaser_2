@@ -2,7 +2,7 @@
 var config = {
     scale: {
         width: 800,
-        height: 600,
+        height: 500,
     },
     // pixelArt: true,d
     type: Phaser.AUTO,
@@ -88,20 +88,20 @@ function update() {
 }
 
 const updateTurboFlipFlop = () => {
-    if (cursorsARROWS.left.isDown) {
+    if (cursorsWASD.b.isDown) {
         turboFlipFlop = true;
     } else {
         turboFlipFlop = false;
     }
 };
 const udpateJumpFlipFlop = () => {
-    if (cursorsARROWS.up.isDown) {
+    if (cursorsWASD.a.isDown) {
         if (flipFlop.u) {
             velocity.y = -JUMP_POWER;
             flipFlop.u = false;
         }
     }
-    if (cursorsARROWS.up.isUp) {
+    if (cursorsWASD.a.isUp) {
         flipFlop.u = true;
     }
 };
