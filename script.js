@@ -154,9 +154,9 @@ function create() {
 
         p[i].particles = this.add.particles("tail_" + i);
         p[i].emitter = p[i].particles.createEmitter({
-            speed: p[i].SPEED_OF_TAIL / .3,
+            speed: p[i].SPEED_OF_TAIL / .6,
             scale: { start: 0.06, end: 0 },
-            lifespan: p[i].LENGTH_OF_TAIL / 2,
+            lifespan: p[i].LENGTH_OF_TAIL,
             blendMode: "ADD",
         });
         p[i].player = this.physics.add.image(10, 10, "character_" + i);
