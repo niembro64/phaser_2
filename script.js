@@ -3,14 +3,14 @@ var config = {
         width: 800,
         height: 500,
     },
-    // pixelArt: true,d
+    // pixelArt: true,
     type: Phaser.AUTO,
     parent: "yourgamediv",
     backgroundColor: "#0072bc",
     physics: {
         default: "arcade",
         arcade: {
-            // debug: true,
+            debug: true,
         },
     },
     scene: {
@@ -19,25 +19,30 @@ var config = {
         update: update,
     },
 };
-const TURBO_MULTIPLIER = 3;
-const HORIZONTAL_SPEED = 40;
-const VERTICAL_SPEED = 12;
-const GRAVITY = 50;
-var FULL_SPEED = 200;
-var SIDE_DECAY = 1.2;
-var DOWN_DECAY = 1.06;
-var JUMP_POWER = 1600;
-const LENGTH_OF_TAIL = 1000;
-const SPEED_OF_TAIL = 30;
 
-var cursorsARROWS;
-var cursorsWASD;
-var player;
-var velocity = { x: 0, y: 0 };
-var flipFlop = { r: false, l: false, u: false, d: false };
-var turboFlipFlop = false;
-var turboMultiply = 0;
-var game = new Phaser.Game(config);
+var p1 = {
+    player: null,
+    TURBO_MULTIPLIER: 3,
+    HORIZONTAL_SPEED: 40,
+    VERTICAL_SPEED: 12,
+    GRAVITY: 50,
+    FULL_SPEED: 200,
+    SIDE_DECAY: 1.2,
+    DOWN_DECAY: 1.06,
+    JUMP_POWER: 1600,
+    LENGTH_OF_TAIL: 1000,
+    SPEED_OF_TAIL: 30,
+
+    cursorsARROWS: null,
+    cursorsWASD: null,
+    velocity: { x: 0, y: 0 },
+    flipFlop: { r: false, l: false, u: false, d: false },
+    turboFlipFlop: false,
+    turboMultiply: 0,
+    particles: null,
+    emitter: null,
+};
+game: new Phaser.Game(config);
 
 function preload() {
     this.load.image("block", "kirbsmallboi.png");
@@ -50,8 +55,8 @@ function create() {
     // this.scale.displaySize.setAspectRatio(width / height);
     // this.scale.refresh();
     // cursorsWASD = this.input.keyboard.createCursorKeys();
-    cursorsARROWS = this.input.keyboard.createCursorKeys();
-    cursorsWASD = this.input.keyboard.addKeys({
+    p1.cursorsARROWS = this.input.keyboard.createCursorKeys();
+    p1.cursorsWASD = this.input.keyboard.addKeys({
         up: Phaser.Input.Keyboard.KeyCodes.W,
         down: Phaser.Input.Keyboard.KeyCodes.S,
         left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -60,81 +65,82 @@ function create() {
         a: Phaser.Input.Keyboard.KeyCodes.K,
     });
 
-    var particles = this.add.particles("red");
-    var emitter = particles.createEmitter({
-        speed: SPEED_OF_TAIL,
+    p1.particles = this.add.particles("red");
+    p1.emitter = p1.particles.createEmitter({
+        speed: p1.SPEED_OF_TAIL,
         scale: { start: 0.05, end: 0 },
-        lifespan: LENGTH_OF_TAIL,
+        lifespan: p1.LENGTH_OF_TAIL,
         blendMode: "ADD",
     });
-    player = this.physics.add.image(10, 10, "block");
-    player.setCollideWorldBounds(true);
-    emitter.startFollow(player);
+    p1.player = this.physics.add.image(10, 10, "block");
+    p1.player.setCollideWorldBounds(true);
+    p1.emitter.startFollow(p1.player);
 }
 
 function update() {
-    player.setVelocityX(velocity.x);
-    player.setVelocityY(velocity.y);
-    velocity.x = velocity.x / SIDE_DECAY;
-    velocity.y = velocity.y / DOWN_DECAY + GRAVITY;
-
+    updateVelocity();
     updateSpeedWASD();
     updateLeftRightFlipFlop();
     udpateJumpFlipFlop();
-    updateTurboFlipFlop();
-
-    turboMultiply = turboFlipFlop ? TURBO_MULTIPLIER : 1;
+    updateTurbo();
 }
+const updateVelocity = () => {
+    p1.player.setVelocityX(p1.velocity.x);
+    p1.player.setVelocityY(p1.velocity.y);
+    p1.velocity.x = p1.velocity.x / p1.SIDE_DECAY;
+    p1.velocity.y = p1.velocity.y / p1.DOWN_DECAY + p1.GRAVITY;
+};
 
-const updateTurboFlipFlop = () => {
-    if (cursorsWASD.b.isDown) {
-        turboFlipFlop = true;
+const updateTurbo = () => {
+    if (p1.cursorsWASD.b.isDown) {
+        p1.turboFlipFlop = true;
     } else {
-        turboFlipFlop = false;
+        p1.turboFlipFlop = false;
     }
+    p1.turboMultiply = p1.turboFlipFlop ? p1.TURBO_MULTIPLIER : 1;
 };
 const udpateJumpFlipFlop = () => {
-    if (cursorsWASD.a.isDown) {
-        if (flipFlop.u) {
-            velocity.y = -JUMP_POWER;
-            flipFlop.u = false;
+    if (p1.cursorsWASD.a.isDown) {
+        if (p1.flipFlop.u) {
+            p1.velocity.y = -p1.JUMP_POWER;
+            p1.flipFlop.u = false;
         }
     }
-    if (cursorsWASD.a.isUp) {
-        flipFlop.u = true;
+    if (p1.cursorsWASD.a.isUp) {
+        p1.flipFlop.u = true;
     }
 };
 
 const updateLeftRightFlipFlop = () => {
-    if (cursorsWASD.left.isDown) {
-        if (flipFlop.l) {
-            velocity.x = -FULL_SPEED;
-            flipFlop.l = false;
+    if (p1.cursorsWASD.left.isDown) {
+        if (p1.flipFlop.l) {
+            p1.velocity.x = -p1.FULL_SPEED;
+            p1.flipFlop.l = false;
         }
     } else {
-        flipFlop.l = true;
+        p1.flipFlop.l = true;
     }
-    if (cursorsWASD.right.isDown) {
-        if (flipFlop.r) {
-            velocity.x = FULL_SPEED;
-            flipFlop.r = false;
+    if (p1.cursorsWASD.right.isDown) {
+        if (p1.flipFlop.r) {
+            p1.velocity.x = p1.FULL_SPEED;
+            p1.flipFlop.r = false;
         }
     } else {
-        flipFlop.r = true;
+        p1.flipFlop.r = true;
     }
 };
 const updateSpeedWASD = () => {
-    if (cursorsWASD.left.isDown) {
-        velocity.x -= HORIZONTAL_SPEED * turboMultiply;
+    if (p1.cursorsWASD.left.isDown) {
+        p1.velocity.x -= p1.HORIZONTAL_SPEED * p1.turboMultiply;
     }
-    if (cursorsWASD.right.isDown) {
-        velocity.x += HORIZONTAL_SPEED * turboMultiply;
+    if (p1.cursorsWASD.right.isDown) {
+        p1.velocity.x += p1.HORIZONTAL_SPEED * p1.turboMultiply;
     }
-    if (cursorsWASD.up.isDown) {
-        velocity.y -= VERTICAL_SPEED * turboMultiply;
+    if (p1.cursorsWASD.up.isDown) {
+        p1.velocity.y -= p1.VERTICAL_SPEED * p1.turboMultiply;
     }
-    if (cursorsWASD.down.isDown) {
-        velocity.y += VERTICAL_SPEED * turboMultiply;
+    if (p1.cursorsWASD.down.isDown) {
+        p1.velocity.y += p1.VERTICAL_SPEED * p1.turboMultiply;
     }
 };
 
