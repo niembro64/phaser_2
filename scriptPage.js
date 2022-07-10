@@ -11,26 +11,25 @@ for (let i = 0; i < numPlayers; i++) {
         htmlString += `
         <ul class="created">
             <li>P${i + 1}<li>
-            <li>&nbsp;&nbsp;&nbsp;↑: ↑</li>
-            <li>&nbsp;&nbsp;&nbsp;↓: ↓</li>
-            <li>&nbsp;&nbsp;&nbsp;←: ←</li>
-            <li>&nbsp;&nbsp;&nbsp;→: →</li>
-            <li>FAST: END</li>
-            <li>JUMP: PAGE ↓</li>
-        </ul>`
-
+            <li>&nbsp;&nbsp;&nbsp;UP: UP</li>
+            <li>&nbsp;DOWN: DOWN</li>
+            <li>&nbsp;LEFT: LEFT</li>
+            <li>RIGHT: RIGHT</li>
+            <li>&nbsp;FAST: END</li>
+            <li>&nbsp;JUMP: PAGE ↓</li>
+        </ul>`;
     } else {
         htmlString += `
     <ul class="created">
-        <li>P${i + 1}<li>
-        <li>&nbsp;&nbsp;&nbsp;↑: ${String.fromCharCode(p[i].keyboard.up)}</li>
-        <li>&nbsp;&nbsp;&nbsp;↓: ${String.fromCharCode(p[i].keyboard.down)}</li>
-        <li>&nbsp;&nbsp;&nbsp;←: ${String.fromCharCode(p[i].keyboard.left)}</li>
-        <li>&nbsp;&nbsp;&nbsp;→: ${String.fromCharCode(
+    <li>P${i + 1}<li>
+    <li>&nbsp;&nbsp;&nbsp;UP: ${String.fromCharCode(p[i].keyboard.up)}</li>
+    <li>&nbsp;DOWN: ${String.fromCharCode(p[i].keyboard.down)}</li>
+    <li>&nbsp;LEFT: ${String.fromCharCode(p[i].keyboard.left)}</li>
+    <li>RIGHT: ${String.fromCharCode(
             p[i].keyboard.right
         )}</li>
-        <li>FAST: ${String.fromCharCode(p[i].keyboard.fast)}</li>
-        <li>JUMP: ${String.fromCharCode(p[i].keyboard.jump)}</li>
+        <li>&nbsp;FAST: ${String.fromCharCode(p[i].keyboard.fast)}</li>
+        <li>&nbsp;JUMP: ${String.fromCharCode(p[i].keyboard.jump)}</li>
     </ul>
     `;
     }

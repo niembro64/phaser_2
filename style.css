@@ -72,15 +72,16 @@ h5 {
 }
 
 #controls {
+    width: 800px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
     /* border: 1px dashed lime; */
-    margin: 10px 0px 0px 0px; 
+    margin: 10px 0px 0px 0px;
 }
 
-.created{
-    /* border: 1px dashed red;  */
-    flex: 1; 
+.created {
+    /* border: 1px dashed red; */
+    flex: 1;
 }
