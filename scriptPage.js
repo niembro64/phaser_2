@@ -7,7 +7,20 @@ const c = document.getElementById("controls");
 let htmlString = "";
 
 for (let i = 0; i < numPlayers; i++) {
-    htmlString += `
+    if (i === 3) {
+        htmlString += `
+        <ul class="created">
+            <li>P${i + 1}<li>
+            <li>&nbsp;&nbsp;&nbsp;↑: ↑</li>
+            <li>&nbsp;&nbsp;&nbsp;↓: ↓</li>
+            <li>&nbsp;&nbsp;&nbsp;←: ←</li>
+            <li>&nbsp;&nbsp;&nbsp;→: →</li>
+            <li>FAST: END</li>
+            <li>JUMP: PAGE ↓</li>
+        </ul>`
+
+    } else {
+        htmlString += `
     <ul class="created">
         <li>P${i + 1}<li>
         <li>&nbsp;&nbsp;&nbsp;↑: ${String.fromCharCode(p[i].keyboard.up)}</li>
@@ -20,7 +33,7 @@ for (let i = 0; i < numPlayers; i++) {
         <li>JUMP: ${String.fromCharCode(p[i].keyboard.jump)}</li>
     </ul>
     `;
-    console.log(i);
+    }
 }
 
 c.innerHTML = htmlString;
