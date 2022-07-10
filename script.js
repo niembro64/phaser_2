@@ -10,7 +10,7 @@ var config = {
     physics: {
         default: "arcade",
         arcade: {
-            debug: true,
+            // debug: true,
         },
     },
     scene: {
@@ -46,8 +46,8 @@ var p = [
             down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D,
-            fast: Phaser.Input.Keyboard.KeyCodes.J,
-            jump: Phaser.Input.Keyboard.KeyCodes.K,
+            fast: Phaser.Input.Keyboard.KeyCodes.Z,
+            jump: Phaser.Input.Keyboard.KeyCodes.X,
         },
     },
     {
@@ -70,12 +70,12 @@ var p = [
         particles: null,
         emitter: null,
         keyboard: {
-            up: Phaser.Input.Keyboard.KeyCodes.W,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
-            left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D,
-            fast: Phaser.Input.Keyboard.KeyCodes.J,
-            jump: Phaser.Input.Keyboard.KeyCodes.K,
+            up: Phaser.Input.Keyboard.KeyCodes.T,
+            down: Phaser.Input.Keyboard.KeyCodes.G,
+            left: Phaser.Input.Keyboard.KeyCodes.F,
+            right: Phaser.Input.Keyboard.KeyCodes.H,
+            fast: Phaser.Input.Keyboard.KeyCodes.V,
+            jump: Phaser.Input.Keyboard.KeyCodes.B,
         },
     },
     {
@@ -98,12 +98,12 @@ var p = [
         particles: null,
         emitter: null,
         keyboard: {
-            up: Phaser.Input.Keyboard.KeyCodes.W,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
-            left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D,
-            fast: Phaser.Input.Keyboard.KeyCodes.J,
-            jump: Phaser.Input.Keyboard.KeyCodes.K,
+            up: Phaser.Input.Keyboard.KeyCodes.I,
+            down: Phaser.Input.Keyboard.KeyCodes.K,
+            left: Phaser.Input.Keyboard.KeyCodes.J,
+            right: Phaser.Input.Keyboard.KeyCodes.L,
+            fast: Phaser.Input.Keyboard.KeyCodes.O,
+            jump: Phaser.Input.Keyboard.KeyCodes.P,
         },
     },
     {
@@ -126,12 +126,12 @@ var p = [
         particles: null,
         emitter: null,
         keyboard: {
-            up: Phaser.Input.Keyboard.KeyCodes.W,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
-            left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D,
-            fast: Phaser.Input.Keyboard.KeyCodes.J,
-            jump: Phaser.Input.Keyboard.KeyCodes.K,
+            up: Phaser.Input.Keyboard.KeyCodes.UP,
+            down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+            left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+            right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+            fast: Phaser.Input.Keyboard.KeyCodes.END,
+            jump: Phaser.Input.Keyboard.KeyCodes.PAGE_DOWN,
         },
     },
 ];
@@ -149,24 +149,21 @@ function create() {
     // this.scale.refresh();
     // cursorsWASD = this.input.keyboard.createCursorKeys();
     for (let i = 0; i < numPlayers; i++) {
-        p[i].cursorsWASD = this.input.keyboard.addKeys( {
-            up: Phaser.Input.Keyboard.KeyCodes.W,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
-            left: Phaser.Input.Keyboard.KeyCodes.A,
-            right: Phaser.Input.Keyboard.KeyCodes.D,
-            fast: Phaser.Input.Keyboard.KeyCodes.J,
-            jump: Phaser.Input.Keyboard.KeyCodes.K,
-        });
+        p[i].cursorsWASD = this.input.keyboard.addKeys(p[i].keyboard);
         // p[i].cursorsARROWS = this.input.keyboard.createCursorKeys();
 
         p[i].particles = this.add.particles("tail_" + i);
         p[i].emitter = p[i].particles.createEmitter({
-            speed: p[i].SPEED_OF_TAIL,
-            scale: { start: 0.05, end: 0 },
-            lifespan: p[i].LENGTH_OF_TAIL,
+            speed: p[i].SPEED_OF_TAIL / .3,
+            scale: { start: 0.06, end: 0 },
+            lifespan: p[i].LENGTH_OF_TAIL / 2,
             blendMode: "ADD",
         });
         p[i].player = this.physics.add.image(10, 10, "character_" + i);
+
+        p[i].player.setPosition(100 * i + 250, 50);
+        p[i].velocity.x = 1000 * i - 1500; 
+
         p[i].player.setCollideWorldBounds(true);
         p[i].emitter.startFollow(p[i].player);
     }
@@ -234,17 +231,17 @@ const updateLeftRightFlipFlop = () => {
 };
 const updateSpeedWASD = () => {
     for (let i = 0; i < numPlayers; i++) {
-        if (p[i].cursorsWASD.left.isDown) {
-            p[i].velocity.x -= p[i].HORIZONTAL_SPEED * p[i].turboMultiply;
-        }
-        if (p[i].cursorsWASD.right.isDown) {
-            p[i].velocity.x += p[i].HORIZONTAL_SPEED * p[i].turboMultiply;
-        }
         if (p[i].cursorsWASD.up.isDown) {
             p[i].velocity.y -= p[i].VERTICAL_SPEED * p[i].turboMultiply;
         }
         if (p[i].cursorsWASD.down.isDown) {
             p[i].velocity.y += p[i].VERTICAL_SPEED * p[i].turboMultiply;
+        }
+        if (p[i].cursorsWASD.left.isDown) {
+            p[i].velocity.x -= p[i].HORIZONTAL_SPEED * p[i].turboMultiply;
+        }
+        if (p[i].cursorsWASD.right.isDown) {
+            p[i].velocity.x += p[i].HORIZONTAL_SPEED * p[i].turboMultiply;
         }
     }
 };
