@@ -9,7 +9,6 @@
             crossorigin="anonymous"
         />
         <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
-        <script type="text/javascript" src="script.js"></script>
         <link rel="stylesheet" href="style.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,19 +25,16 @@
                 >
                 <h1>GAME</h1>
             </div>
+            <div id="controls"></div>
 
             <div data-role="page" class="pages"></div>
 
-            <ul>
-                <h5>CONTROLS</h5>
-                <li>MOVE: "WASD"</li>
-                <li>JUMP: "K"</li>
-                <li>FAST: "J"</li>
-            </ul>
             <button onclick="onClickHandler()" class="btn btn-warning">
                 <h1>?</h1>
             </button>
         </div>
         <div id="yourgamediv"></div>
     </body>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="scriptPage.js"></script>
 </html>

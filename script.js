@@ -154,7 +154,7 @@ function create() {
 
         p[i].particles = this.add.particles("tail_" + i);
         p[i].emitter = p[i].particles.createEmitter({
-            speed: p[i].SPEED_OF_TAIL / .6,
+            speed: p[i].SPEED_OF_TAIL / 0.6,
             scale: { start: 0.06, end: 0 },
             lifespan: p[i].LENGTH_OF_TAIL,
             blendMode: "ADD",
@@ -162,7 +162,7 @@ function create() {
         p[i].player = this.physics.add.image(10, 10, "character_" + i);
 
         p[i].player.setPosition(100 * i + 250, 50);
-        p[i].velocity.x = 1000 * i - 1500; 
+        p[i].velocity.x = 1000 * i - 1500;
 
         p[i].player.setCollideWorldBounds(true);
         p[i].emitter.startFollow(p[i].player);
@@ -244,8 +244,4 @@ const updateSpeedWASD = () => {
             p[i].velocity.x += p[i].HORIZONTAL_SPEED * p[i].turboMultiply;
         }
     }
-};
-
-const onClickHandler = () => {
-    console.log("CLICK");
 };
