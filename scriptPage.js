@@ -16,7 +16,7 @@ for (let i = 0; i < numPlayers; i++) {
             <li>&nbsp;LEFT: LEFT</li>
             <li>RIGHT: RIGHT</li>
             <li>&nbsp;FAST: END</li>
-            <li>&nbsp;JUMP: PAGE ↓</li>
+            <li>&nbsp;JUMP: PAGEDOWN</li>
         </ul>`;
     } else {
         htmlString += `
