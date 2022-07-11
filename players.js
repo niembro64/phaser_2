@@ -1,6 +1,6 @@
 
 var numPlayers = 4;
-var p = [
+var players = [
     {
         player: null,
         TURBO_MULTIPLIER: 3,

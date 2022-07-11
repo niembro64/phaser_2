@@ -5,7 +5,7 @@ var config = {
     },
     pixelArt: true,
     type: Phaser.AUTO,
-    backgroundColor: '#2d2d2d',
+    backgroundColor: "#2d2d2d",
     parent: "yourgamediv",
     backgroundColor: "#0072bc",
     physics: {
@@ -31,28 +31,25 @@ function preload() {
 }
 
 function create() {
-    // this.scale.displaySize.setAspectRatio(width / height);
-    // this.scale.refresh();
-    // cursorsWASD = this.input.keyboard.createCursorKeys();
-    for (let i = 0; i < numPlayers; i++) {
-        p[i].cursorsWASD = this.input.keyboard.addKeys(p[i].keyboard);
-        // p[i].cursorsARROWS = this.input.keyboard.createCursorKeys();
+    players.forEach((p, i) => {
+        p.cursorsWASD = this.input.keyboard.addKeys(p.keyboard);
+        // p.cursorsARROWS = this.input.keyboard.createCursorKeys();
 
-        p[i].particles = this.add.particles("tail_" + i);
-        p[i].emitter = p[i].particles.createEmitter({
-            speed: p[i].SPEED_OF_TAIL / 0.6,
+        p.particles = this.add.particles("tail_" + i);
+        p.emitter = p.particles.createEmitter({
+            speed: p.SPEED_OF_TAIL / 0.6,
             scale: { start: 0.06, end: 0 },
-            lifespan: p[i].LENGTH_OF_TAIL,
+            lifespan: p.LENGTH_OF_TAIL,
             blendMode: "ADD",
         });
-        p[i].player = this.physics.add.image(10, 10, "character_" + i);
+        p.player = this.physics.add.image(10, 10, "character_" + i);
 
-        p[i].player.setPosition(100 * i + 250, 50);
-        p[i].velocity.x = 1000 * i - 1500;
+        p.player.setPosition(100 * i + 250, 50);
+        p.velocity.x = 1000 * i - 1500;
 
-        p[i].player.setCollideWorldBounds(true);
-        p[i].emitter.startFollow(p[i].player);
-    }
+        p.player.setCollideWorldBounds(true);
+        p.emitter.startFollow(p.player);
+    });
 }
 
 function update() {
@@ -63,71 +60,71 @@ function update() {
     updateTurbo();
 }
 const updateVelocity = () => {
-    for (let i = 0; i < numPlayers; i++) {
-        p[i].player.setVelocityX(p[i].velocity.x);
-        p[i].player.setVelocityY(p[i].velocity.y);
-        p[i].velocity.x = p[i].velocity.x / p[i].SIDE_DECAY;
-        p[i].velocity.y = p[i].velocity.y / p[i].DOWN_DECAY + p[i].GRAVITY;
-    }
+    players.forEach((p, i) => {
+        p.player.setVelocityX(p.velocity.x);
+        p.player.setVelocityY(p.velocity.y);
+        p.velocity.x = p.velocity.x / p.SIDE_DECAY;
+        p.velocity.y = p.velocity.y / p.DOWN_DECAY + p.GRAVITY;
+    });
 };
 
 const updateTurbo = () => {
-    for (let i = 0; i < numPlayers; i++) {
-        if (p[i].cursorsWASD.fast.isDown) {
-            p[i].turboFlipFlop = true;
+    players.forEach((p, i) => {
+        if (p.cursorsWASD.fast.isDown) {
+            p.turboFlipFlop = true;
         } else {
-            p[i].turboFlipFlop = false;
+            p.turboFlipFlop = false;
         }
-        p[i].turboMultiply = p[i].turboFlipFlop ? p[i].TURBO_MULTIPLIER : 1;
-    }
+        p.turboMultiply = p.turboFlipFlop ? p.TURBO_MULTIPLIER : 1;
+    });
 };
 const udpateJumpFlipFlop = () => {
-    for (let i = 0; i < numPlayers; i++) {
-        if (p[i].cursorsWASD.jump.isDown) {
-            if (p[i].flipFlop.u) {
-                p[i].velocity.y = -p[i].JUMP_POWER;
-                p[i].flipFlop.u = false;
+    players.forEach((p, i) => {
+        if (p.cursorsWASD.jump.isDown) {
+            if (p.flipFlop.u) {
+                p.velocity.y = -p.JUMP_POWER;
+                p.flipFlop.u = false;
             }
         }
-        if (p[i].cursorsWASD.jump.isUp) {
-            p[i].flipFlop.u = true;
+        if (p.cursorsWASD.jump.isUp) {
+            p.flipFlop.u = true;
         }
-    }
+    });
 };
 
 const updateLeftRightFlipFlop = () => {
-    for (let i = 0; i < numPlayers; i++) {
-        if (p[i].cursorsWASD.left.isDown) {
-            if (p[i].flipFlop.l) {
-                p[i].velocity.x = -p[i].FULL_SPEED;
-                p[i].flipFlop.l = false;
+    players.forEach((p, i) => {
+        if (p.cursorsWASD.left.isDown) {
+            if (p.flipFlop.l) {
+                p.velocity.x = -p.FULL_SPEED;
+                p.flipFlop.l = false;
             }
         } else {
-            p[i].flipFlop.l = true;
+            p.flipFlop.l = true;
         }
-        if (p[i].cursorsWASD.right.isDown) {
-            if (p[i].flipFlop.r) {
-                p[i].velocity.x = p[i].FULL_SPEED;
-                p[i].flipFlop.r = false;
+        if (p.cursorsWASD.right.isDown) {
+            if (p.flipFlop.r) {
+                p.velocity.x = p.FULL_SPEED;
+                p.flipFlop.r = false;
             }
         } else {
-            p[i].flipFlop.r = true;
+            p.flipFlop.r = true;
         }
-    }
+    });
 };
 const updateSpeedWASD = () => {
-    for (let i = 0; i < numPlayers; i++) {
-        if (p[i].cursorsWASD.up.isDown) {
-            p[i].velocity.y -= p[i].VERTICAL_SPEED * p[i].turboMultiply;
+    players.forEach((p, i) => {
+        if (p.cursorsWASD.up.isDown) {
+            p.velocity.y -= p.VERTICAL_SPEED * p.turboMultiply;
         }
-        if (p[i].cursorsWASD.down.isDown) {
-            p[i].velocity.y += p[i].VERTICAL_SPEED * p[i].turboMultiply;
+        if (p.cursorsWASD.down.isDown) {
+            p.velocity.y += p.VERTICAL_SPEED * p.turboMultiply;
         }
-        if (p[i].cursorsWASD.left.isDown) {
-            p[i].velocity.x -= p[i].HORIZONTAL_SPEED * p[i].turboMultiply;
+        if (p.cursorsWASD.left.isDown) {
+            p.velocity.x -= p.HORIZONTAL_SPEED * p.turboMultiply;
         }
-        if (p[i].cursorsWASD.right.isDown) {
-            p[i].velocity.x += p[i].HORIZONTAL_SPEED * p[i].turboMultiply;
+        if (p.cursorsWASD.right.isDown) {
+            p.velocity.x += p.HORIZONTAL_SPEED * p.turboMultiply;
         }
-    }
+    });
 };
