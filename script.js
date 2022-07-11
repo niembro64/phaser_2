@@ -1,17 +1,17 @@
 var config = {
     scale: {
         width: 800,
-        height: 500,
+        height: 400,
     },
     pixelArt: true,
     type: Phaser.AUTO,
-    backgroundColor: "#2d2d2d",
     parent: "yourgamediv",
     backgroundColor: "#0072bc",
     physics: {
         default: "arcade",
         arcade: {
-            // debug: true,
+            gravity: { y: 300 },
+            debug: false,
         },
     },
     scene: {
@@ -59,6 +59,13 @@ function update() {
     udpateJumpFlipFlop();
     updateTurbo();
 }
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
 const updateVelocity = () => {
     players.forEach((p, i) => {
         p.player.setVelocityX(p.velocity.x);
