@@ -1,10 +1,10 @@
 const onClickHandler = () => {
-    console.log("CLICK");
+    console.log('CLICK');
 };
 
-const c = document.getElementById("controls");
+const c = document.getElementById('controls');
 
-let htmlString = "";
+let htmlString = '';
 
 players.forEach((p, i) => {
     if (i === 3) {

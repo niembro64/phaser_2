@@ -3,12 +3,12 @@ var config = {
         width: 800,
         height: 400,
     },
-    pixelArt: true,
+    pixelArt: false,
     type: Phaser.AUTO,
-    parent: "yourgamediv",
-    backgroundColor: "#0072bc",
+    parent: 'yourgamediv',
+    backgroundColor: '#0072bc',
     physics: {
-        default: "arcade",
+        default: 'arcade',
         arcade: {
             gravity: { y: 300 },
             debug: false,
@@ -25,8 +25,8 @@ game: new Phaser.Game(config);
 
 function preload() {
     for (let i = 0; i < numPlayers; i++) {
-        this.load.image("character_" + i, "character_" + i + ".png");
-        this.load.image("tail_" + i, "tail_" + i + ".png");
+        this.load.image('character_' + i, 'character_' + i + '.png');
+        this.load.image('tail_' + i, 'tail_' + i + '.png');
     }
 }
 
@@ -35,14 +35,14 @@ function create() {
         p.cursorsWASD = this.input.keyboard.addKeys(p.keyboard);
         // p.cursorsARROWS = this.input.keyboard.createCursorKeys();
 
-        p.particles = this.add.particles("tail_" + i);
+        p.particles = this.add.particles('tail_' + i);
         p.emitter = p.particles.createEmitter({
             speed: p.SPEED_OF_TAIL / 0.6,
             scale: { start: 0.06, end: 0 },
             lifespan: p.LENGTH_OF_TAIL,
-            blendMode: "ADD",
+            blendMode: 'ADD',
         });
-        p.player = this.physics.add.image(10, 10, "character_" + i);
+        p.player = this.physics.add.image(10, 10, 'character_' + i);
 
         p.player.setPosition(100 * i + 250, 50);
         p.velocity.x = 1000 * i - 1500;
