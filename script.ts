@@ -1,25 +1,26 @@
 var config = {
     scale: {
         width: 800,
-        height: 400
+        height: 400,
     },
     pixelArt: false,
     type: Phaser.AUTO,
     parent: 'yourgamediv',
     backgroundColor: '#0072bc',
     physics: {
-        "default": 'arcade',
+        default: 'arcade',
         arcade: {
             // gravity: { y: 300 },
-            debug: false
-        }
+            debug: false,
+        },
     },
     scene: {
         preload: preload,
         create: create,
-        update: update
-    }
+        update: update,
+    },
 };
+
 var numPlayers = 4;
 var players = [
     {
@@ -47,8 +48,8 @@ var players = [
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D,
             fast: Phaser.Input.Keyboard.KeyCodes.Z,
-            jump: Phaser.Input.Keyboard.KeyCodes.X
-        }
+            jump: Phaser.Input.Keyboard.KeyCodes.X,
+        },
     },
     {
         player: null,
@@ -75,8 +76,8 @@ var players = [
             left: Phaser.Input.Keyboard.KeyCodes.F,
             right: Phaser.Input.Keyboard.KeyCodes.H,
             fast: Phaser.Input.Keyboard.KeyCodes.V,
-            jump: Phaser.Input.Keyboard.KeyCodes.B
-        }
+            jump: Phaser.Input.Keyboard.KeyCodes.B,
+        },
     },
     {
         player: null,
@@ -103,8 +104,8 @@ var players = [
             left: Phaser.Input.Keyboard.KeyCodes.J,
             right: Phaser.Input.Keyboard.KeyCodes.L,
             fast: Phaser.Input.Keyboard.KeyCodes.O,
-            jump: Phaser.Input.Keyboard.KeyCodes.P
-        }
+            jump: Phaser.Input.Keyboard.KeyCodes.P,
+        },
     },
     {
         player: null,
@@ -131,42 +132,47 @@ var players = [
             left: Phaser.Input.Keyboard.KeyCodes.LEFT,
             right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
             fast: Phaser.Input.Keyboard.KeyCodes.END,
-            jump: Phaser.Input.Keyboard.KeyCodes.PAGE_DOWN
-        }
+            jump: Phaser.Input.Keyboard.KeyCodes.PAGE_DOWN,
+        },
     },
 ];
+
 game: new Phaser.Game(config);
 var platforms;
+
 function preload() {
-    var _this = this;
-    players.forEach(function (p, i) {
-        _this.load.image('character_' + i, 'character_' + i + '.png');
-        _this.load.image('tail_' + i, 'tail_' + i + '.png');
-        _this.load.image('platform', 'platform.png');
+    players.forEach((p, i) => {
+        this.load.image('character_' + i, 'character_' + i + '.png');
+        this.load.image('tail_' + i, 'tail_' + i + '.png');
+        this.load.image('platform', 'platform.png');
     });
 }
+
 function create() {
-    var _this = this;
     platforms = this.physics.add.staticGroup();
     platforms.create(400, 300, 'platform').setScale(0.5).refreshBody();
-    players.forEach(function (p, i) {
-        p.cursorsWASD = _this.input.keyboard.addKeys(p.keyboard);
+    players.forEach((p, i) => {
+        p.cursorsWASD = this.input.keyboard.addKeys(p.keyboard);
         // p.cursorsARROWS = this.input.keyboard.createCursorKeys();
-        p.particles = _this.add.particles('tail_' + i);
+
+        p.particles = this.add.particles('tail_' + i);
         p.emitter = p.particles.createEmitter({
             speed: p.SPEED_OF_TAIL / 0.6,
             scale: { start: 0.06, end: 0 },
             lifespan: p.LENGTH_OF_TAIL,
-            blendMode: 'ADD'
+            blendMode: 'ADD',
         });
-        p.player = _this.physics.add.sprite(10, 10, 'character_' + i);
+        p.player = this.physics.add.sprite(10, 10, 'character_' + i);
+
         p.player.setPosition(100 * i + 250, 50);
         p.velocity.x = 1000 * i - 1500;
+
         p.player.setCollideWorldBounds(true);
         p.emitter.startFollow(p.player);
-        _this.physics.add.collider(p.player, platforms);
+        this.physics.add.collider(p.player, platforms);
     });
 }
+
 function update() {
     updateVelocity();
     updateSpeedWASD();
@@ -174,32 +180,34 @@ function update() {
     udpateJumpFlipFlop();
     updateTurbo();
 }
+
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
-var updateVelocity = function () {
-    players.forEach(function (p, i) {
+
+const updateVelocity = () => {
+    players.forEach((p, i) => {
         p.player.setVelocityX(p.velocity.x);
         p.player.setVelocityY(p.velocity.y);
         p.velocity.x = p.velocity.x / p.SIDE_DECAY;
         p.velocity.y = p.velocity.y / p.DOWN_DECAY + p.GRAVITY;
     });
 };
-var updateTurbo = function () {
-    players.forEach(function (p, i) {
+
+const updateTurbo = () => {
+    players.forEach((p, i) => {
         if (p.cursorsWASD.fast.isDown) {
             p.turboFlipFlop = true;
-        }
-        else {
+        } else {
             p.turboFlipFlop = false;
         }
         p.turboMultiply = p.turboFlipFlop ? p.TURBO_MULTIPLIER : 1;
     });
 };
-var udpateJumpFlipFlop = function () {
-    players.forEach(function (p, i) {
+const udpateJumpFlipFlop = () => {
+    players.forEach((p, i) => {
         if (p.cursorsWASD.jump.isDown) {
             if (p.flipFlop.u) {
                 p.velocity.y = -p.JUMP_POWER;
@@ -211,15 +219,15 @@ var udpateJumpFlipFlop = function () {
         }
     });
 };
-var updateLeftRightFlipFlop = function () {
-    players.forEach(function (p, i) {
+
+const updateLeftRightFlipFlop = () => {
+    players.forEach((p, i) => {
         if (p.cursorsWASD.left.isDown) {
             if (p.flipFlop.l) {
                 p.velocity.x = -p.FULL_SPEED;
                 p.flipFlop.l = false;
             }
-        }
-        else {
+        } else {
             p.flipFlop.l = true;
         }
         if (p.cursorsWASD.right.isDown) {
@@ -227,14 +235,13 @@ var updateLeftRightFlipFlop = function () {
                 p.velocity.x = p.FULL_SPEED;
                 p.flipFlop.r = false;
             }
-        }
-        else {
+        } else {
             p.flipFlop.r = true;
         }
     });
 };
-var updateSpeedWASD = function () {
-    players.forEach(function (p, i) {
+const updateSpeedWASD = () => {
+    players.forEach((p, i) => {
         if (p.cursorsWASD.up.isDown) {
             p.velocity.y -= p.VERTICAL_SPEED * p.turboMultiply;
         }
@@ -249,17 +256,40 @@ var updateSpeedWASD = function () {
         }
     });
 };
-var onClickHandler = function () {
+
+const onClickHandler = () => {
     console.log('CLICK');
 };
-var c = document.getElementById('controls');
-var htmlString = '';
-players.forEach(function (p, i) {
+
+const c = document.getElementById('controls');
+
+let htmlString = '';
+
+players.forEach((p, i) => {
     if (i === 3) {
-        htmlString += "\n        <ul class=\"created\">\n            <li>P".concat(i + 1, "<li>\n            <li>&nbsp;&nbsp;&nbsp;UP: UP</li>\n            <li>&nbsp;DOWN: DOWN</li>\n            <li>&nbsp;LEFT: LEFT</li>\n            <li>RIGHT: RIGHT</li>\n            <li>&nbsp;FAST: END</li>\n            <li>&nbsp;JUMP: PAGEDOWN</li>\n        </ul>");
-    }
-    else {
-        htmlString += "\n    <ul class=\"created\">\n    <li>P".concat(i + 1, "<li>\n    <li>&nbsp;&nbsp;&nbsp;UP: ").concat(String.fromCharCode(p.keyboard.up), "</li>\n    <li>&nbsp;DOWN: ").concat(String.fromCharCode(p.keyboard.down), "</li>\n    <li>&nbsp;LEFT: ").concat(String.fromCharCode(p.keyboard.left), "</li>\n    <li>RIGHT: ").concat(String.fromCharCode(p.keyboard.right), "</li>\n        <li>&nbsp;FAST: ").concat(String.fromCharCode(p.keyboard.fast), "</li>\n        <li>&nbsp;JUMP: ").concat(String.fromCharCode(p.keyboard.jump), "</li>\n    </ul>\n    ");
+        htmlString += `
+        <ul class="created">
+            <li>P${i + 1}<li>
+            <li>&nbsp;&nbsp;&nbsp;UP: UP</li>
+            <li>&nbsp;DOWN: DOWN</li>
+            <li>&nbsp;LEFT: LEFT</li>
+            <li>RIGHT: RIGHT</li>
+            <li>&nbsp;FAST: END</li>
+            <li>&nbsp;JUMP: PAGEDOWN</li>
+        </ul>`;
+    } else {
+        htmlString += `
+    <ul class="created">
+    <li>P${i + 1}<li>
+    <li>&nbsp;&nbsp;&nbsp;UP: ${String.fromCharCode(p.keyboard.up)}</li>
+    <li>&nbsp;DOWN: ${String.fromCharCode(p.keyboard.down)}</li>
+    <li>&nbsp;LEFT: ${String.fromCharCode(p.keyboard.left)}</li>
+    <li>RIGHT: ${String.fromCharCode(p.keyboard.right)}</li>
+        <li>&nbsp;FAST: ${String.fromCharCode(p.keyboard.fast)}</li>
+        <li>&nbsp;JUMP: ${String.fromCharCode(p.keyboard.jump)}</li>
+    </ul>
+    `;
     }
 });
+
 c.innerHTML = htmlString;
