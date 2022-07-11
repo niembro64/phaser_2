@@ -24,7 +24,7 @@ var config = {
 var numPlayers = 4;
 var players = [
     {
-        player: null,
+        player_internal: null,
         TURBO_MULTIPLIER: 3,
         HORIZONTAL_SPEED: 40,
         VERTICAL_SPEED: 12,
@@ -52,7 +52,7 @@ var players = [
         },
     },
     {
-        player: null,
+        player_internal: null,
         TURBO_MULTIPLIER: 3,
         HORIZONTAL_SPEED: 40,
         VERTICAL_SPEED: 12,
@@ -80,7 +80,7 @@ var players = [
         },
     },
     {
-        player: null,
+        player_internal: null,
         TURBO_MULTIPLIER: 3,
         HORIZONTAL_SPEED: 40,
         VERTICAL_SPEED: 12,
@@ -108,7 +108,7 @@ var players = [
         },
     },
     {
-        player: null,
+        player_internal: null,
         TURBO_MULTIPLIER: 3,
         HORIZONTAL_SPEED: 40,
         VERTICAL_SPEED: 12,
@@ -140,6 +140,35 @@ var players = [
 game: new Phaser.Game(config);
 var platforms;
 
+// export interface player {
+//     player_internal: any;
+//     TURBO_MULTIPLIER: number;
+//     HORIZONTAL_SPEED: number;
+//     VERTICAL_SPEED: number;
+//     GRAVITY: number;
+//     FULL_SPEED: number;
+//     SIDE_DECAY: number;
+//     DOWN_DECAY: number;
+//     JUMP_POWER: number;
+//     LENGTH_OF_TAIL: number;
+//     SPEED_OF_TAIL: number;
+//     cursorsWASD: any;
+//     velocity: { x: number; y: number };
+//     flipFlop: { r: boolean; l: boolean; u: boolean; d: boolean };
+//     turboFlipFlop: boolean;
+//     turboMultiply: number;
+//     particles: any;
+//     emitter: any;
+//     keyboard: {
+//         up: any;
+//         down: any;
+//         left: any;
+//         right: any;
+//         fast: any;
+//         jump: any;
+//     };
+// }
+
 function preload() {
     players.forEach((p, i) => {
         this.load.image('character_' + i, 'character_' + i + '.png');
@@ -151,6 +180,7 @@ function preload() {
 function create() {
     platforms = this.physics.add.staticGroup();
     platforms.create(400, 300, 'platform').setScale(0.5).refreshBody();
+    platforms.create(500, 200, 'platform').setScale(0.25, 0.5).refreshBody();
     players.forEach((p, i) => {
         p.cursorsWASD = this.input.keyboard.addKeys(p.keyboard);
         // p.cursorsARROWS = this.input.keyboard.createCursorKeys();
@@ -162,14 +192,14 @@ function create() {
             lifespan: p.LENGTH_OF_TAIL,
             blendMode: 'ADD',
         });
-        p.player = this.physics.add.sprite(10, 10, 'character_' + i);
+        p.player_internal = this.physics.add.sprite(10, 10, 'character_' + i);
 
-        p.player.setPosition(100 * i + 250, 50);
+        p.player_internal.setPosition(100 * i + 250, 50);
         p.velocity.x = 1000 * i - 1500;
 
-        p.player.setCollideWorldBounds(true);
-        p.emitter.startFollow(p.player);
-        this.physics.add.collider(p.player, platforms);
+        p.player_internal.setCollideWorldBounds(true);
+        p.emitter.startFollow(p.player_internal);
+        this.physics.add.collider(p.player_internal, platforms);
     });
 }
 
@@ -189,8 +219,8 @@ function update() {
 
 const updateVelocity = () => {
     players.forEach((p, i) => {
-        p.player.setVelocityX(p.velocity.x);
-        p.player.setVelocityY(p.velocity.y);
+        p.player_internal.setVelocityX(p.velocity.x);
+        p.player_internal.setVelocityY(p.velocity.y);
         p.velocity.x = p.velocity.x / p.SIDE_DECAY;
         p.velocity.y = p.velocity.y / p.DOWN_DECAY + p.GRAVITY;
     });
